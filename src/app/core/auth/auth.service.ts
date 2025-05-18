@@ -54,29 +54,27 @@ export class AuthService {
      * @param credentials
      */
     signIn(credentials: { email: string; password: string }): Observable<any> {
-        // Throw error, if the user is already logged in
-        if (this._authenticated) {
-            return throwError('User is already logged in.');
-        }
-        //'api/auth/sign-in'
-        //`${environment.apiUrl}/administrador/auth/login`
-        return this._httpClient.post(`${environment.apiUrl}/administrador/auth/login`, credentials).pipe(
-            switchMap((response: any) => {
-                // Store the access token in the local storage
-                console.log('Return!!',response);
-                this.accessToken = response.accessToken;
-
-                // Set the authenticated flag to true
-                this._authenticated = true;
-                console.log('Validado!',this._authenticated);
-                // Store the user on the user service
-                this._userService.user = response.user;
-
-                // Return a new observable with the response
-                return of(response);
-            })
-        );
+    // Si ya estás autenticado, no vuelvas a loguear
+    if (this._authenticated) {
+        return throwError(() => new Error('Ya estás autenticado.'));
     }
+
+    return this._httpClient.post(`${environment.apiUrl}/administrador/auth/login`, credentials).pipe(
+        switchMap((response: any) => {
+            // Guarda token y usuario
+            localStorage.setItem('accessToken', response.accessToken);
+            localStorage.setItem('user', JSON.stringify(response.user));
+
+            this.accessToken = response.accessToken;
+            this._authenticated = true;
+
+            // Establece el usuario en el servicio
+            this._userService.user = response.user;
+
+            return of(response);
+        })
+    );
+}
 
     /**
      * Sign in using the access token
@@ -119,16 +117,20 @@ export class AuthService {
     /**
      * Sign out
      */
-    signOut(): Observable<any> {
-        // Remove the access token from the local storage
-        localStorage.removeItem('accessToken');
+    signOut(): Observable<boolean> {
+    // Elimina todo
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
 
-        // Set the authenticated flag to false
-        this._authenticated = false;
+    this.accessToken = null;
+    this._authenticated = false;
+    this._userService.user = null;
 
-        // Return the observable
-        return of(true);
-    }
+    // Redirige al login
+    //this._router.navigate(['/sign-in']);
+
+    return of(true);
+}
 
     /**
      * Sign up
@@ -160,22 +162,19 @@ export class AuthService {
      * Check the authentication status
      */
     check(): Observable<boolean> {
-        // Check if the user is logged in
-        if (this._authenticated) {
-            return of(true);
-        }
-
-        // Check the access token availability
-        if (!this.accessToken) {
-            return of(false);
-        }
-
-        // Check the access token expire date
-        if (AuthUtils.isTokenExpired(this.accessToken)) {
-            return of(false);
-        }
-
-        // If the access token exists, and it didn't expire, sign in using it
-        return this.signInUsingToken();
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+        return of(false);
     }
+
+    this.accessToken = token;
+    this._authenticated = true;
+
+    const userData = localStorage.getItem('user');
+    if (userData) {
+        this._userService.user = JSON.parse(userData);
+    }
+
+    return of(true);
+}
 }

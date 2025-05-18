@@ -12,6 +12,7 @@ export const AuthGuard: CanActivateFn | CanActivateChildFn = (route, state) => {
         .pipe(
             switchMap((authenticated) => {
                 // If the user is not authenticated...
+                console.log('validamos que este logeadi');
                 if (!authenticated) {
                     // Redirect to the sign-in page with a redirectUrl param
                     const redirectURL =
