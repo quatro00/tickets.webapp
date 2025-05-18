@@ -1,7 +1,19 @@
 import { Injectable } from '@angular/core';
 import { FuseNavigationItem } from '@fuse/components/navigation';
 import { FuseMockApiService } from '@fuse/lib/mock-api';
+import { AuthService } from 'app/core/auth/auth.service';
+import { items } from 'app/mock-api/apps/file-manager/data';
 import {
+    compactNavigation_admin,
+    defaultNavigation_admin,
+    futuristicNavigation_admin,
+    horizontalNavigation_admin,
+
+    compactNavigation_colaborador,
+    defaultNavigation_colaborador,
+    futuristicNavigation_colaborador,
+    horizontalNavigation_colaborador,
+
     compactNavigation,
     defaultNavigation,
     futuristicNavigation,
@@ -11,6 +23,16 @@ import { cloneDeep } from 'lodash-es';
 
 @Injectable({ providedIn: 'root' })
 export class NavigationMockApi {
+
+    private _compactNavigation: FuseNavigationItem[];
+
+    private _defaultNavigation: FuseNavigationItem[];
+
+    private _futuristicNavigation: FuseNavigationItem[];
+
+    private _horizontalNavigation: FuseNavigationItem[];
+
+    /*
     private readonly _compactNavigation: FuseNavigationItem[] =
         compactNavigation;
     private readonly _defaultNavigation: FuseNavigationItem[] =
@@ -19,11 +41,14 @@ export class NavigationMockApi {
         futuristicNavigation;
     private readonly _horizontalNavigation: FuseNavigationItem[] =
         horizontalNavigation;
+        */
 
     /**
      * Constructor
      */
-    constructor(private _fuseMockApiService: FuseMockApiService) {
+    constructor(private _fuseMockApiService: FuseMockApiService,
+        private _authService: AuthService
+    ) {
         // Register Mock API handlers
         this.registerHandlers();
     }
@@ -36,6 +61,31 @@ export class NavigationMockApi {
      * Register Mock API handlers
      */
     registerHandlers(): void {
+        //buscamos el rol
+
+        const userData = localStorage.getItem('user');
+        var roles: any[];
+        var rol = '';
+        if (userData) {
+            roles = JSON.parse(userData).roles;
+        }
+        if (roles.indexOf('Administrador') != -1 && rol == '') { rol = 'Administrador' }
+        if (roles.indexOf('Supervisor') != -1 && rol == '') { rol = 'Supervisor' }
+
+        if (rol == 'Administrador') {
+            this._compactNavigation = compactNavigation_admin;
+            this._defaultNavigation = defaultNavigation_admin;
+            this._futuristicNavigation = futuristicNavigation_admin;
+            this._horizontalNavigation = horizontalNavigation_admin;
+        }
+
+        if (rol == 'Colaborador') {
+            this._compactNavigation = compactNavigation_colaborador;
+            this._defaultNavigation = defaultNavigation_colaborador;
+            this._futuristicNavigation = futuristicNavigation_colaborador;
+            this._horizontalNavigation = horizontalNavigation_colaborador;
+        }
+
         // -----------------------------------------------------------------------------------------------------
         // @ Navigation - GET
         // -----------------------------------------------------------------------------------------------------
