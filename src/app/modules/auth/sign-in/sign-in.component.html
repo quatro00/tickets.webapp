@@ -9,7 +9,7 @@
 
             <!-- Title -->
             <div class="mt-8 text-4xl font-extrabold leading-tight tracking-tight">
-                Ingresar
+                Ingresar2
             </div>
 
 
@@ -37,11 +37,7 @@
                     @if (signInForm.get('email').hasError('required')) {
                     <mat-error> Dato requerido </mat-error>
                     }
-                    @if (signInForm.get('email').hasError('email')) {
-                    <mat-error>
-                        Please enter a valid email address
-                    </mat-error>
-                    }
+                   
                 </mat-form-field>
 
                 <!-- Password field -->

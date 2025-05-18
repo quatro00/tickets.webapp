@@ -53,7 +53,7 @@ export class AuthSignInComponent implements OnInit {
         private _activatedRoute: ActivatedRoute,
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
-        private _router: Router
+        private _router: Router,
     ) {}
 
     // -----------------------------------------------------------------------------------------------------
@@ -68,9 +68,15 @@ export class AuthSignInComponent implements OnInit {
         this.signInForm = this._formBuilder.group({
             email: [
                 'hughes.brian@company.com',
-                [Validators.required, Validators.email],
+                //'',
+                [Validators.required
+                //    , Validators.email
+                ],
             ],
-            password: ['admin', Validators.required],
+            password: [
+                'admin', 
+                //'',
+                Validators.required],
             rememberMe: [''],
         });
     }
@@ -95,6 +101,7 @@ export class AuthSignInComponent implements OnInit {
         this.showAlert = false;
 
         // Sign in
+        console.log(this.signInForm.value);
         this._authService.signIn(this.signInForm.value).subscribe(
             () => {
                 // Set the redirect url.
@@ -105,9 +112,10 @@ export class AuthSignInComponent implements OnInit {
                     this._activatedRoute.snapshot.queryParamMap.get(
                         'redirectURL'
                     ) || '/signed-in-redirect';
-
+                    
                 // Navigate to the redirect url
                 this._router.navigateByUrl(redirectURL);
+                console.log(redirectURL);
             },
             (response) => {
                 // Re-enable the form

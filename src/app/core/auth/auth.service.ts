@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
+import { environment } from 'enviroments/environment';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -57,15 +58,17 @@ export class AuthService {
         if (this._authenticated) {
             return throwError('User is already logged in.');
         }
-
-        return this._httpClient.post('api/auth/sign-in', credentials).pipe(
+        //'api/auth/sign-in'
+        //`${environment.apiUrl}/administrador/auth/login`
+        return this._httpClient.post(`${environment.apiUrl}/administrador/auth/login`, credentials).pipe(
             switchMap((response: any) => {
                 // Store the access token in the local storage
+                console.log('Return!!',response);
                 this.accessToken = response.accessToken;
 
                 // Set the authenticated flag to true
                 this._authenticated = true;
-
+                console.log('Validado!',this._authenticated);
                 // Store the user on the user service
                 this._userService.user = response.user;
 
