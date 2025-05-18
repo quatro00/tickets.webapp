@@ -17,21 +17,9 @@ import { provideIcons } from 'app/core/icons/icons.provider';
 import { MockApiService } from 'app/mock-api';
 import { firstValueFrom } from 'rxjs';
 import { TranslocoHttpLoader } from './core/transloco/transloco.http-loader';
-import { AuthService } from './core/auth/auth.service';
-import { APP_INITIALIZER } from '@angular/core';
-
-export function appInitializer(authService: AuthService) {
-    return () => authService.check().toPromise();
-}
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        {
-            provide: APP_INITIALIZER,
-            useFactory: appInitializer,
-            deps: [AuthService],
-            multi: true
-        },
         provideAnimations(),
         provideHttpClient(),
         provideRouter(
