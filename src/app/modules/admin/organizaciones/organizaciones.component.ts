@@ -1,0 +1,99 @@
+import { ChangeDetectionStrategy, Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { fuseAnimations } from '@fuse/animations';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+
+
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
+
+@Component({
+  selector: 'app-organizaciones',
+  standalone: true,
+  templateUrl: './organizaciones.component.html',
+  imports:[
+    MatMenu,
+    MatMenuTrigger,
+    MatTableModule,
+    MatSortModule,
+    MatIconModule,
+    MatProgressBarModule,
+    MatFormFieldModule, 
+    MatIcon,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+  MatInputModule],
+  styles: [
+        /* language=SCSS */
+        `
+            .inventory-grid {
+                grid-template-columns: 48px auto 40px;
+
+                @screen sm {
+                    grid-template-columns: 48px auto 112px 72px;
+                }
+
+                @screen md {
+                    grid-template-columns: 48px 112px auto 112px 72px;
+                }
+
+                @screen lg {
+                    grid-template-columns: 48px 112px auto 112px 96px 96px 72px;
+                }
+            }
+        `,
+    ],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: fuseAnimations,
+})
+export class OrganizacionesComponent {
+
+  searchInputControl: UntypedFormControl = new UntypedFormControl();
+  isLoading: boolean = false;
+
+  displayedColumns: string[] = ['clave', 'nombre', 'telefono', 'direccion', 'responsable', 'activo'];
+    dataSource = new MatTableDataSource<any>([]);
+  
+    @ViewChild(MatSort) sort!: MatSort;
+
+    ngOnInit(): void {
+        this.loadData();
+
+        // Filtro por input
+        this.searchInputControl.valueChanges.subscribe(value => {
+            this.dataSource.filter = value.trim().toLowerCase();
+        });
+
+        this.dataSource.filterPredicate = (data, filter) => {
+            return Object.values(data).some(value =>
+                (value + '').toLowerCase().includes(filter)
+            );
+        };
+    }
+
+    loadData(): void {
+        this.isLoading = true;
+
+        // Simulación de carga (reemplazar con servicio real)
+        setTimeout(() => {
+            this.dataSource.data = [
+                { clave: 'ORG01', nombre: 'Hospital Central', telefono: '8123456789', direccion: 'Av. Salud 123', responsable: 'Dr. Pérez', activo: true },
+                { clave: 'ORG02', nombre: 'Clínica Norte', telefono: '8187654321', direccion: 'Calle 45 Norte', responsable: 'Lic. Martínez', activo: false },
+                // ... más datos
+            ];
+
+            this.dataSource.sort = this.sort;
+            this.isLoading = false;
+        }, 800);
+    }
+}

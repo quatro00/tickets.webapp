@@ -4,38 +4,66 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 //menus para el admin
 export const defaultNavigation_admin: FuseNavigationItem[] = [
     {
-        id   : 'example',
-        title: 'Example admin',
+        id   : 'home',
+        title: 'Home',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/admin/home'
+    },
+    {
+        id   : 'organizaciones',
+        title: 'Organizaciones',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : '/admin/organizaciones'
     }
 ];
 export const compactNavigation_admin: FuseNavigationItem[] = [
     {
-        id   : 'example',
-        title: 'Example admin',
+       id   : 'home',
+        title: 'Home',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/admin/home'
+    },
+    {
+        id   : 'organizaciones',
+        title: 'Organizaciones',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : '/admin/organizaciones'
     }
 ];
 export const futuristicNavigation_admin: FuseNavigationItem[] = [
     {
-        id   : 'example',
-        title: 'Example admin',
+       id   : 'home',
+        title: 'Home',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/admin/home'
+    },
+    {
+        id   : 'organizaciones',
+        title: 'Organizaciones',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : '/admin/organizaciones'
     }
 ];
 export const horizontalNavigation_admin: FuseNavigationItem[] = [
     {
-        id   : 'example',
-        title: 'Example admin',
+       id   : 'home',
+        title: 'Home',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/admin/home'
+    },
+    {
+        id   : 'organizaciones',
+        title: 'Organizaciones',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : '/admin/organizaciones'
     }
 ];
 
