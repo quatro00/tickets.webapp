@@ -69,8 +69,10 @@ export class NavigationMockApi {
         if (userData) {
             roles = JSON.parse(userData).roles;
         }
-        if (roles.indexOf('Administrador') != -1 && rol == '') { rol = 'Administrador' }
-        if (roles.indexOf('Supervisor') != -1 && rol == '') { rol = 'Supervisor' }
+        if (roles != null) {
+            if (roles.indexOf('Administrador') != -1 && rol == '') { rol = 'Administrador' }
+            if (roles.indexOf('Supervisor') != -1 && rol == '') { rol = 'Supervisor' }
+        }
 
         if (rol == 'Administrador') {
             this._compactNavigation = compactNavigation_admin;
