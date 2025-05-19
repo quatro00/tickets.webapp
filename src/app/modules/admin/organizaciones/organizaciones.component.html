@@ -27,7 +27,7 @@
                 <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Buscar'" />
             </mat-form-field>
             <!-- Add product button -->
-            <button class="ml-4" mat-flat-button [color]="'primary'">
+            <button class="ml-4" mat-flat-button [color]="'primary'" (click)="nuevaOrganizacion()">
                 <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                 <span class="ml-2 mr-1">Nuevo</span>
             </button>

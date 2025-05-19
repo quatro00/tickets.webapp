@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Registrar organización</h2>
+<mat-dialog-content [formGroup]="form" class="flex flex-col gap-4 pt-2">
+  <mat-form-field appearance="outline">
+    <mat-label>Clave</mat-label>
+    <input matInput formControlName="clave" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="nombre" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Teléfono</mat-label>
+    <input matInput formControlName="telefono" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Dirección</mat-label>
+    <input matInput formControlName="direccion" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Responsable</mat-label>
+    <input matInput formControlName="responsable" />
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-flat-button [color]="'warn'" 
+        (click)="cancel()">
+    <mat-icon class="mr-2 text-white">cancel</mat-icon>
+    <span>Cancelar</span>
+</button>
+
+<button  mat-flat-button [color]="'primary'" 
+        (click)="save()">
+    <mat-icon class="mr-2 text-white">check</mat-icon>
+    <span>Aceptar</span>
+</button>
+
+</mat-dialog-actions>

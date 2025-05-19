@@ -14,27 +14,28 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
+import { OrganizacionFormComponent } from 'app/modals/organizacion-form/organizacion-form.component';
+import { OrganizacionService } from 'app/services/admin/organizacion.service';
 
 @Component({
   selector: 'app-organizaciones',
   standalone: true,
   templateUrl: './organizaciones.component.html',
-  imports:[
-    MatMenu,
-    MatMenuTrigger,
+  imports: [
     MatTableModule,
     MatSortModule,
     MatIconModule,
     MatProgressBarModule,
-    MatFormFieldModule, 
+    MatFormFieldModule,
     MatIcon,
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
-  MatInputModule],
+    MatInputModule],
   styles: [
-        /* language=SCSS */
-        `
+    /* language=SCSS */
+    `
             .inventory-grid {
                 grid-template-columns: 48px auto 40px;
 
@@ -51,10 +52,10 @@ import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
                 }
             }
         `,
-    ],
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: fuseAnimations,
+  ],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: fuseAnimations,
 })
 export class OrganizacionesComponent {
 
@@ -62,38 +63,73 @@ export class OrganizacionesComponent {
   isLoading: boolean = false;
 
   displayedColumns: string[] = ['clave', 'nombre', 'telefono', 'direccion', 'responsable', 'activo'];
-    dataSource = new MatTableDataSource<any>([]);
-  
-    @ViewChild(MatSort) sort!: MatSort;
+  dataSource = new MatTableDataSource<any>([]);
 
-    ngOnInit(): void {
-        this.loadData();
+  @ViewChild(MatSort) sort!: MatSort;
 
-        // Filtro por input
-        this.searchInputControl.valueChanges.subscribe(value => {
-            this.dataSource.filter = value.trim().toLowerCase();
+  constructor(
+    private dialog: MatDialog,
+    private organizacionService:OrganizacionService
+  ) { }
+
+  nuevaOrganizacion(): void {
+    const dialogRef = this.dialog.open(OrganizacionFormComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Datos guardados:', result);
+        // Aquí puedes llamar a tu servicio para guardar la nueva organización
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadData();
+
+    // Filtro por input
+    this.searchInputControl.valueChanges.subscribe(value => {
+      this.dataSource.filter = value.trim().toLowerCase();
+    });
+
+    this.dataSource.filterPredicate = (data, filter) => {
+      return Object.values(data).some(value =>
+        (value + '').toLowerCase().includes(filter)
+      );
+    };
+  }
+
+  loadData(): void {
+    //this.isLoading = true;
+
+    // Simulación de carga (reemplazar con servicio real)
+    console.log(1);
+    this.organizacionService.GetAll()
+    .subscribe({
+          next: (response) => {
+            this.dataSource.data = response;
+          },
+          error:(err)=>{
+            //this.msg.error(err.error.message);
+            //this.loadData();
+          },
+          complete() {
+            this.isLoading = false;
+          },
         });
 
-        this.dataSource.filterPredicate = (data, filter) => {
-            return Object.values(data).some(value =>
-                (value + '').toLowerCase().includes(filter)
-            );
-        };
-    }
+        /*
+    setTimeout(() => {
+      this.dataSource.data = [
+        { clave: 'ORG01', nombre: 'Hospital Central', telefono: '8123456789', direccion: 'Av. Salud 123', responsable: 'Dr. Pérez', activo: true },
+        { clave: 'ORG02', nombre: 'Clínica Norte', telefono: '8187654321', direccion: 'Calle 45 Norte', responsable: 'Lic. Martínez', activo: false },
+        // ... más datos
+      ];
 
-    loadData(): void {
-        this.isLoading = true;
-
-        // Simulación de carga (reemplazar con servicio real)
-        setTimeout(() => {
-            this.dataSource.data = [
-                { clave: 'ORG01', nombre: 'Hospital Central', telefono: '8123456789', direccion: 'Av. Salud 123', responsable: 'Dr. Pérez', activo: true },
-                { clave: 'ORG02', nombre: 'Clínica Norte', telefono: '8187654321', direccion: 'Calle 45 Norte', responsable: 'Lic. Martínez', activo: false },
-                // ... más datos
-            ];
-
-            this.dataSource.sort = this.sort;
-            this.isLoading = false;
-        }, 800);
-    }
+      this.dataSource.sort = this.sort;
+      this.isLoading = false;
+    }, 800);
+    */
+  }
 }
