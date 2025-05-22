@@ -27,16 +27,27 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-flat-button [color]="'warn'" 
-        (click)="cancel()">
+ <button class="fuse-mat-button" mat-flat-button [color]="'warn'" [disabled]="form.disabled"
+    (click)="cancel()">
     <mat-icon class="mr-2 text-white">cancel</mat-icon>
-    <span>Cancelar</span>
-</button>
+    @if (!form.disabled) {
+    <span> Cancelar </span>
+    }
+    @if (form.disabled) {
+    <mat-progress-spinner [diameter]="24" [mode]="'indeterminate'"></mat-progress-spinner>
+    }
+  </button>
 
-<button  mat-flat-button [color]="'primary'" 
-        (click)="save()">
+  <button class="fuse-mat-button" mat-flat-button [color]="'primary'" [disabled]="form.disabled"
+    (click)="save()">
     <mat-icon class="mr-2 text-white">check</mat-icon>
-    <span>Aceptar</span>
-</button>
+    @if (!form.disabled) {
+    <span> Guardar </span>
+    }
+    @if (form.disabled) {
+    <mat-progress-spinner [diameter]="24" [mode]="'indeterminate'"></mat-progress-spinner>
+    }
+  </button>
+
 
 </mat-dialog-actions>

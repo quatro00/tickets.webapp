@@ -17,12 +17,14 @@ import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { OrganizacionFormComponent } from 'app/modals/organizacion-form/organizacion-form.component';
 import { OrganizacionService } from 'app/services/admin/organizacion.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-organizaciones',
   standalone: true,
   templateUrl: './organizaciones.component.html',
   imports: [
+    CommonModule,
     MatTableModule,
     MatSortModule,
     MatIconModule,
@@ -62,7 +64,7 @@ export class OrganizacionesComponent {
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   isLoading: boolean = false;
 
-  displayedColumns: string[] = ['clave', 'nombre', 'telefono', 'direccion', 'responsable', 'activo'];
+  displayedColumns: string[] = ['clave', 'nombre', 'telefono', 'direccion', 'responsable', 'activo', 'acciones'];
   dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -79,7 +81,7 @@ export class OrganizacionesComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Datos guardados:', result);
+        this.loadData();
         // Aquí puedes llamar a tu servicio para guardar la nueva organización
       }
     });
@@ -100,6 +102,49 @@ export class OrganizacionesComponent {
     };
   }
 
+  activar(item){
+    this.organizacionService.Reactivar(item.id)
+    .subscribe({
+      next: (response) => {
+        this.loadData();
+      },
+      complete: () => {
+        //this.btnLoading = false;
+      },
+      error: () => {
+        //this.btnLoading = false;
+      }
+    })
+  }
+
+  desactivar(item){
+    this.organizacionService.Desactivar(item.id)
+    .subscribe({
+      next: (response) => {
+        this.loadData();
+      },
+      complete: () => {
+        //this.btnLoading = false;
+      },
+      error: () => {
+        //this.btnLoading = false;
+      }
+    })
+  }
+
+  editar(item){
+    const dialogRef = this.dialog.open(OrganizacionFormComponent, {
+    width: '500px',
+    data: item, // Le pasas los datos para editar
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      // refresca lista o muestra notificación
+      this.loadData();
+    }
+  });
+  }
   loadData(): void {
     //this.isLoading = true;
 
@@ -108,6 +153,7 @@ export class OrganizacionesComponent {
     this.organizacionService.GetAll()
     .subscribe({
           next: (response) => {
+            console.log(response);
             this.dataSource.data = response;
           },
           error:(err)=>{

@@ -6,9 +6,9 @@ import { environment } from 'enviroments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class OrganizacionService {
+export class AreaService {
 
-  service:string = 'administrador/organizacion';
+  service:string = 'administrador/area';
 
 
   constructor(private http:HttpClient) { }
