@@ -10,13 +10,17 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { AreaFormComponent } from 'app/modals/area-form/area-form.component';
+import { AsignarResponsablesComponent } from 'app/modals/asignar-responsables/asignar-responsables.component';
 import { AreaService } from 'app/services/admin/area.service';
 import { OrganizacionService } from 'app/services/admin/organizacion.service';
+import { AlertService } from 'app/services/alert.service';
 
 @Component({
   selector: 'app-areas',
   imports: [
+    MatTooltipModule,
     CommonModule,
     MatTableModule,
     MatSelectModule,
@@ -44,7 +48,8 @@ export class AreasComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private areaService: AreaService,
-    private organizacionService: OrganizacionService
+    private organizacionService: OrganizacionService,
+    private alertService:AlertService
   ) { }
 
   ngOnInit(): void {
@@ -81,28 +86,77 @@ export class AreasComponent implements OnInit {
   }
 
   nueva(): void {
-      const dialogRef = this.dialog.open(AreaFormComponent, {
-        width: '500px',
-      });
-  
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          //this.loadData();
-          // Aquí puedes llamar a tu servicio para guardar la nueva organización
+    const dialogRef = this.dialog.open(AreaFormComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        //this.loadData();
+        // Aquí puedes llamar a tu servicio para guardar la nueva organización
+      }
+    });
+  }
+
+  activar(item){
+    this.areaService.Reactivar(item.id)
+    .subscribe({
+      next: (response) => {
+        this.loadAreas();
+      },
+      complete: () => {
+        //this.btnLoading = false;
+      },
+      error: (err) => {
+        //this.btnLoading = false;
+        this.alertService.showError("Error", err.error);
+      }
+    })
+  }
+
+  desactivar(item){
+    this.areaService.Desactivar(item.id)
+    .subscribe({
+      next: (response) => {
+        this.loadAreas();
+      },
+      complete: () => {
+        //this.btnLoading = false;
+      },
+      error: (err) => {
+        //this.btnLoading = false;
+        this.alertService.showError("Error", err.error);
+      }
+    })
+  }
+
+  asignarResponsables(area:any): void {
+    console.log(area);
+    const dialogRef = this.dialog.open(AsignarResponsablesComponent, {
+      width: '750px',
+      data: { area }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if(result){
+          this.loadAreas();
         }
-      });
-    }
+        //this.loadData();
+        // Aquí puedes llamar a tu servicio para guardar la nueva organización
+      }
+    });
+  }
 
   loadAreas() {
     //this.isLoading = true;
     const orgId = this.organizacionControl.value;
     this.dataSource = [];
-    
+
     this.areaService.GetAll().subscribe((data) => {
       this.dataSource = data;
       this.isLoading = false;
       console.log(data);
     });
-    
   }
 }

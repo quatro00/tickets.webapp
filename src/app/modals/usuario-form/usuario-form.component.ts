@@ -142,7 +142,7 @@ export class UsuarioFormComponent implements OnInit {
           this.dialogRef.close(true);
         },
         error: (err) => {
-          //console.error(err);
+          console.error(err);
           this.snackBar.open({
             title: 'Fix360',
             message: 'Ha ocurrido un error al procesar la solicitud.',

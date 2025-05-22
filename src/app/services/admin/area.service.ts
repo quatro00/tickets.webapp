@@ -8,34 +8,43 @@ import { environment } from 'enviroments/environment';
 })
 export class AreaService {
 
-  service:string = 'administrador/area';
+  service: string = 'administrador/area';
 
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  Crear(request:any):Observable<any>{
-    return this.http.post<any>(`${environment.apiUrl}/${this.service}`,request);
+  Crear(request: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/${this.service}`, request);
   }
 
-  GetAll():Observable<any>{
+  AsignarResponsables(request: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/${this.service}/AsignaResponsables`, request);
+  }
+
+  GetAll(): Observable<any> {
     let params = new HttpParams();
-console.log(`${environment.apiUrl}/${this.service}`);
+    
     return this.http.get<any>(`${environment.apiUrl}/${this.service}`);
   }
 
-  GetById(id:any):Observable<any>{
+  GetResponsablesArea(areaId:string): Observable<any> {
+    const params = new HttpParams().set('areaId', areaId);
+    return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetResponsablesArea`, {params});
+  }
+
+  GetById(id: any): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/${this.service}/${id}`);
   }
 
-  Desactivar(id:any):Observable<any>{
-    return this.http.put<any>(`${environment.apiUrl}/${this.service}/${id}/desactivar`,{});
+  Desactivar(id: any): Observable<any> {
+    return this.http.put<any>(`${environment.apiUrl}/${this.service}/${id}/desactivar`, {});
   }
 
-  Reactivar(id:any):Observable<any>{
-    return this.http.put<any>(`${environment.apiUrl}/${this.service}/${id}/activar`,{});
+  Reactivar(id: any): Observable<any> {
+    return this.http.put<any>(`${environment.apiUrl}/${this.service}/${id}/activar`, {});
   }
-  Update(id:string, request:any):Observable<any>{
-    return this.http.put<any>(`${environment.apiUrl}/${this.service}/${id}`,request);
+  Update(id: string, request: any): Observable<any> {
+    return this.http.put<any>(`${environment.apiUrl}/${this.service}/${id}`, request);
   }
 
 }
