@@ -90,6 +90,7 @@ export const appRoutes: Route[] = [
             { path: 'organizaciones', loadChildren: () => import('app/modules/admin/organizaciones/organizaciones.route') },
             { path: 'areas', loadChildren: () => import('app/modules/admin/areas/areas.route') },
             { path: 'usuarios', loadChildren: () => import('app/modules/admin/usuarios/usuarios.route') },
+            { path: 'subareas', loadChildren: () => import('app/modules/admin/subareas/subareas.route') },
         ]
     },
 

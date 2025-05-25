@@ -17,6 +17,10 @@ export class AreaService {
     return this.http.post<any>(`${environment.apiUrl}/${this.service}`, request);
   }
 
+  CrearSubArea(request: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/${this.service}/CrearSubArea`, request);
+  }
+
   AsignarResponsables(request: any): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/${this.service}/AsignaResponsables`, request);
   }
@@ -30,6 +34,11 @@ export class AreaService {
   GetResponsablesArea(areaId:string): Observable<any> {
     const params = new HttpParams().set('areaId', areaId);
     return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetResponsablesArea`, {params});
+  }
+
+  GetArbolAreas(organizacionId:string): Observable<any> {
+    const params = new HttpParams().set('organizacionId', organizacionId);
+    return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetArbolAreas`, {params});
   }
 
   GetById(id: any): Observable<any> {

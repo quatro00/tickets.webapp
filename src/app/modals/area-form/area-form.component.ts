@@ -52,7 +52,7 @@ export class AreaFormComponent implements OnInit {
     private alertService: AlertService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-
+    console.log(this.data);
     this.isEditMode = !!this.data?.id;
 
     this.form = this.fb.group({

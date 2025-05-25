@@ -29,7 +29,7 @@ export const defaultNavigation_admin: FuseNavigationItem[] = [
         title: 'Sub area',
         type : 'basic',
         icon : 'heroicons_outline:squares-2x2',
-        link : '/admin/subarea'
+        link : '/admin/subareas'
     },
     {
         id   : 'tickets',

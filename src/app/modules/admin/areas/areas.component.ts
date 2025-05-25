@@ -92,8 +92,9 @@ export class AreasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        //this.loadData();
-        // Aquí puedes llamar a tu servicio para guardar la nueva organización
+        if(result){
+          this.loadAreas();
+        }
       }
     });
   }
