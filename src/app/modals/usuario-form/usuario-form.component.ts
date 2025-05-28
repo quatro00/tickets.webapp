@@ -41,7 +41,7 @@ export class UsuarioFormComponent implements OnInit {
   avatarPreview: string | null = null;
 
   form: FormGroup;
-  roles = ['Administrador', 'Supervisor', 'Responsable de area'];
+  roles = ['Administrador', 'Supervisor', 'Responsable de area', 'Agente'];
   organizaciones = [];
 
   constructor(

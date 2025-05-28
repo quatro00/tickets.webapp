@@ -91,6 +91,9 @@ export const appRoutes: Route[] = [
             { path: 'areas', loadChildren: () => import('app/modules/admin/areas/areas.route') },
             { path: 'usuarios', loadChildren: () => import('app/modules/admin/usuarios/usuarios.route') },
             { path: 'subareas', loadChildren: () => import('app/modules/admin/subareas/subareas.route') },
+            { path: 'nuevo-ticket', loadChildren: () => import('app/modules/admin/nuevo-ticket/nuevo-ticket.route') },
+            { path: 'tickets', loadChildren: () => import('app/modules/admin/tickets/tickets.route') },
+            { path: 'equipos-de-trabajo', loadChildren: () => import('app/modules/admin/equipos-de-trabajo/equipos-de-trabajo.route') },
         ]
     },
 

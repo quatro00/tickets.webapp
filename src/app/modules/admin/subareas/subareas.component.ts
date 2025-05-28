@@ -20,18 +20,18 @@ import { MatTreeFlatDataSource, MatTreeFlattener, MatTreeModule } from '@angular
 import { v4 as uuidv4 } from 'uuid';
 import { SubareaFormComponent } from 'app/modals/subarea-form/subarea-form.component';
 
-interface AreaNode {
-  id: string;
-  nombre: string;
-  children?: AreaNode[];
-}
+  interface AreaNode {
+    id: string;
+    nombre: string;
+    children?: AreaNode[];
+  }
 
-interface AreaFlatNode {
-  expandable: boolean;
-  nombre: string;
-  level: number;
-  id: string;
-}
+  interface AreaFlatNode {
+    expandable: boolean;
+    nombre: string;
+    level: number;
+    id: string;
+  }
 
 
 

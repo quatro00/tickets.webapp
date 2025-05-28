@@ -6,14 +6,14 @@ import { environment } from 'enviroments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class UsuarioService {
+export class CatPrioridadService {
 
-  service: string = 'administrador/usuario';
+  service: string = 'administrador/catprioridad';
 
 
   constructor(private http: HttpClient) { }
 
-  Crear(request: FormData): Observable<any> {
+  Crear(request: any): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/${this.service}`, request);
   }
 
@@ -21,18 +21,6 @@ export class UsuarioService {
     let params = new HttpParams();
     
     return this.http.get<any>(`${environment.apiUrl}/${this.service}`);
-  }
-
-  GetResponsables(): Observable<any> {
-    let params = new HttpParams();
-    
-    return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetResponsables`);
-  }
-
-  GetSupervisores(): Observable<any> {
-    let params = new HttpParams();
-    
-    return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetSupervisores`);
   }
 
   GetById(id: any): Observable<any> {
@@ -46,6 +34,7 @@ export class UsuarioService {
   Reactivar(id: any): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/${this.service}/${id}/activar`, {});
   }
+  
   Update(id: string, request: any): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/${this.service}/${id}`, request);
   }

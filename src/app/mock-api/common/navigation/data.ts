@@ -32,6 +32,13 @@ export const defaultNavigation_admin: FuseNavigationItem[] = [
         link : '/admin/subareas'
     },
     {
+        id   : 'equiposDeTrabajo',
+        title: 'Equipos de trabajo',
+        type : 'basic',
+        icon : 'heroicons_outline:wrench',
+        link : '/admin/equipos-de-trabajo'
+    },
+    {
         id   : 'tickets',
         title: 'Tickets',
         type : 'basic',

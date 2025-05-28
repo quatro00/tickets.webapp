@@ -16,6 +16,7 @@ import { AsignarResponsablesComponent } from 'app/modals/asignar-responsables/as
 import { AreaService } from 'app/services/admin/area.service';
 import { OrganizacionService } from 'app/services/admin/organizacion.service';
 import { AlertService } from 'app/services/alert.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-areas',
@@ -40,10 +41,9 @@ export class AreasComponent implements OnInit {
   isLoading: boolean = false;
 
   displayedColumns: string[] = ['organizacion', 'clave', 'nombre', 'responsable', 'telefono', 'activo', 'acciones'];
-  dataSource: any[] = [];
+  dataSource = new MatTableDataSource<any>([]);
   organizaciones: any[] = [];
   organizacionControl = new FormControl('0');
-
 
   constructor(
     private dialog: MatDialog,
@@ -55,7 +55,18 @@ export class AreasComponent implements OnInit {
   ngOnInit(): void {
     this.loadOrganizaciones();
     this.loadAreas();
+  
+    // Filtro por input
+    this.searchInputControl.valueChanges.subscribe(value => {
+      console.log(1);
+      this.dataSource.filter = value.trim().toLowerCase();
+    });
 
+    this.dataSource.filterPredicate = (data, filter) => {
+      return Object.values(data).some(value =>
+        (value + '').toLowerCase().includes(filter)
+      );
+    };
     /*
     this.organizacionControl.valueChanges.subscribe(() => {
       this.loadAreas();
@@ -152,10 +163,10 @@ export class AreasComponent implements OnInit {
   loadAreas() {
     //this.isLoading = true;
     const orgId = this.organizacionControl.value;
-    this.dataSource = [];
+    this.dataSource.data = [];
 
     this.areaService.GetAll().subscribe((data) => {
-      this.dataSource = data;
+      this.dataSource.data = data;
       this.isLoading = false;
       console.log(data);
     });

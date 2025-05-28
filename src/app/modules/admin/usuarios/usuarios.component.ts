@@ -58,12 +58,18 @@ export class UsuariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-
-    /*
-    this.organizacionControl.valueChanges.subscribe(() => {
-      this.loadAreas();
+    
+    // Filtro por input
+    this.searchInputControl.valueChanges.subscribe(value => {
+      console.log(1);
+      this.dataSource.filter = value.trim().toLowerCase();
     });
-    */
+
+    this.dataSource.filterPredicate = (data, filter) => {
+      return Object.values(data).some(value =>
+        (value + '').toLowerCase().includes(filter)
+      );
+    };
   }
 
   filtrarUsuariosPorRol(rolSeleccionado: string) {
