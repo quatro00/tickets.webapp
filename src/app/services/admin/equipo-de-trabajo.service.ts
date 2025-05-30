@@ -27,4 +27,16 @@ export class EquipoDeTrabajoService{
     return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetAgentesResponsables`, {params});
   }
 
+  AsignarAgentes(request: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/${this.service}/AsignarAgentes`, request);
+  }
+
+  GetCategoriasAsignadas(equipoTrabajoId:string): Observable<any> {
+    const params = new HttpParams().set('equipoTrabajoId', equipoTrabajoId);
+    return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetCategoriasAsignadas`, {params});
+  }
+
+  AsignarCategorias(request: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/${this.service}/AsignarCategorias`, request);
+  }
 }

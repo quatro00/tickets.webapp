@@ -22,6 +22,7 @@ import { forkJoin } from 'rxjs';
 import { UsuarioService } from 'app/services/admin/usuario.service';
 import { EquipoDeTrabajoService } from 'app/services/admin/equipo-de-trabajo.service';
 import { AsignarAgenteModalComponent } from 'app/modals/asignar-agente-modal/asignar-agente-modal.component';
+import { AsignarCategoriasComponent } from 'app/modals/asignar-categorias/asignar-categorias.component';
 
 @Component({
   selector: 'app-equipos-de-trabajo',
@@ -163,19 +164,35 @@ export class EquiposDeTrabajoComponent implements OnInit {
     });
   }
 
+  asignarCategorias(equipoTrabajo: any) {
+    console.log(equipoTrabajo);
+    const dialogRef = this.dialog.open(AsignarCategoriasComponent, {
+      width: '750px',
+      data: { equipoTrabajo }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        //this.loadData();
+        // Aquí puedes llamar a tu servicio para guardar la nueva organización
+      }
+    });
+  }
+
   asignarResponsables(equipoTrabajo: any) {
     console.log(equipoTrabajo);
-   const dialogRef = this.dialog.open(AsignarAgenteModalComponent, {
-            width: '750px',
-            data: { equipoTrabajo }
-          });
+    const dialogRef = this.dialog.open(AsignarAgenteModalComponent, {
+      width: '750px',
+      data: { equipoTrabajo }
+    });
 
-          dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-              console.log(result);
-              //this.loadData();
-              // Aquí puedes llamar a tu servicio para guardar la nueva organización
-            }
-          });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        //this.loadData();
+        // Aquí puedes llamar a tu servicio para guardar la nueva organización
+      }
+    });
   }
 }

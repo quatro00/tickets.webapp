@@ -39,11 +39,11 @@ export const defaultNavigation_admin: FuseNavigationItem[] = [
         link : '/admin/equipos-de-trabajo'
     },
     {
-        id   : 'tickets',
-        title: 'Tickets',
+        id   : 'ticketsAbiertos',
+        title: 'Tickets abiertos',
         type : 'basic',
         icon : 'heroicons_outline:ticket',
-        link : '/admin/tickets'
+        link : '/admin/tickets-abiertos'
     },
     {
         id   : 'nuevo-ticket',
