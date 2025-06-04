@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'enviroments/environment';
+import { environment } from 'environments/environment';
 import { UserModel } from 'models/auth/user-model.models';
 import { LoginRequest } from 'models/auth/login-request.model';
 import { LoginResponse } from 'models/auth/login-response.model';

@@ -45,6 +45,16 @@ export const defaultNavigation_admin: FuseNavigationItem[] = [
         icon : 'heroicons_outline:ticket',
         link : '/admin/tickets-abiertos'
     },
+
+    {
+        id   : 'ticketDetalle',
+        title: 'Ticket detalle',
+        type : 'basic',
+        icon : 'heroicons_outline:ticket',
+        link : '/admin/ticket-detalle'
+    },
+
+
     {
         id   : 'nuevo-ticket',
         title: 'Nuevo ticket',

@@ -1,52 +1,70 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogActions, MatDialogContent } from '@angular/material/dialog';
+import { MatDialog, MatDialogActions, MatDialogContent } from '@angular/material/dialog';
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 import { FuseCardComponent } from '@fuse/components/card';
+import { CatCategoriaService } from 'app/services/admin/catcategoria.service';
+import { CatPrioridadService } from 'app/services/admin/catprioridad.service';
+import { OrganizacionService } from 'app/services/admin/organizacion.service';
+import { TicketService } from 'app/services/admin/ticket.service';
+import { AlertService } from 'app/services/alert.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-tickets',
   imports: [
-    
-      MatSelectModule,
-      MatFormFieldModule,
-      MatOptionModule,
-      MatFormField,
-      MatLabel,
-      MatTableModule,
-      FuseCardComponent,
-      MatDialogActions,
-      MatDialogContent,
-      FormsModule,
-      ReactiveFormsModule,
-      MatFormFieldModule,
-      MatDatepickerModule,
-      MatRadioModule,
-      MatIcon,
-      MatTooltipModule,
-      MatButton,
-      MatInputModule,
-      CommonModule,
-      MatProgressSpinnerModule],
+
+    MatSelectModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatFormField,
+    MatLabel,
+    MatTableModule,
+    FuseCardComponent,
+    MatDialogActions,
+    MatDialogContent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatRadioModule,
+    MatIcon,
+    MatTooltipModule,
+    MatButton,
+    MatInputModule,
+    CommonModule,
+    MatProgressSpinnerModule],
   templateUrl: './tickets.component.html',
   styleUrl: './tickets.component.scss'
 })
-export class TicketsComponent {
-filtroTexto: string = '';
+export class TicketsComponent implements OnInit{
+  searchInputControl: UntypedFormControl = new UntypedFormControl();
+  isLoading: boolean = false;
+
+  filtroTexto: string = '';
   filtroArea: string = '';
   filtroCategoria: string = '';
   filtroPrioridad: string = '';
+
+  organizaciones: any[] = [];
+  prioridades: any[] = [];
+  caegorias: any[] = [];
+
+  organizacionControl = new FormControl('0');
+  prioridadControl = new FormControl('0');
+  categoriaControl = new FormControl('0');
 
   columnas: string[] = [
     'folio',
@@ -64,9 +82,11 @@ filtroTexto: string = '';
     'acciones'
   ];
 
+  dataSource = new MatTableDataSource<any>([]);
+
   tickets = [
     {
-      folio:1,
+      folio: 1,
       solicitante: 'Juan Pérez',
       area: 'Urgencias',
       estatus: 'Abierto',
@@ -76,11 +96,11 @@ filtroTexto: string = '';
       contacto: { nombre: 'Juan Pérez', telefono: '555-123-4567' },
       afectaOperacion: true,
       fechaCreacion: new Date('2025-05-20'),
-      asignado:'',
-      organizacion:'UMAE Especialidades Nuevo Leon'
+      asignado: '',
+      organizacion: 'UMAE Especialidades Nuevo Leon'
     },
     {
-      folio:1,
+      folio: 1,
       solicitante: 'Ana Gómez',
       area: 'Laboratorio',
       estatus: 'Abierto',
@@ -90,11 +110,11 @@ filtroTexto: string = '';
       contacto: { nombre: 'Ana Gómez', telefono: '555-987-6543' },
       afectaOperacion: false,
       fechaCreacion: new Date('2025-05-18'),
-      asignado:'',
-      organizacion:'UMAE Especialidades Nuevo Leon'
+      asignado: '',
+      organizacion: 'UMAE Especialidades Nuevo Leon'
     },
     {
-      folio:1,
+      folio: 1,
       solicitante: 'Luis Ramírez',
       area: 'Rayos X',
       estatus: 'Abierto',
@@ -104,8 +124,8 @@ filtroTexto: string = '';
       contacto: { nombre: 'Luis Ramírez', telefono: '555-555-5555' },
       afectaOperacion: true,
       fechaCreacion: new Date('2025-05-22'),
-      asignado:'',
-      organizacion:'UMAE Especialidades Nuevo Leon'
+      asignado: '',
+      organizacion: 'UMAE Especialidades Nuevo Leon'
     }
   ];
 
@@ -121,6 +141,37 @@ filtroTexto: string = '';
     return [...new Set(this.tickets.map(t => t.prioridad))];
   }
 
+  constructor(
+      private dialog: MatDialog,
+      private organizacionService: OrganizacionService,
+      private prioridadService: CatPrioridadService,
+      private categoriaService:CatCategoriaService,
+      private ticketService: TicketService,
+      private alertService: AlertService,
+      private router: Router
+    ) { }
+
+    ngOnInit(): void {
+      this.dataSource.data = [];
+      forkJoin([this.organizacionService.GetAll(), this.prioridadService.GetAll(), this.categoriaService.GetAll(), this.ticketService.GetTicketsAbiertos()]).subscribe({
+            next: ([organizacionResponse, prioridadResponse, categoriasResponsa, ticketsResponse]) => {
+
+              console.log(ticketsResponse);
+              this.organizaciones = organizacionResponse;
+              this.prioridades = prioridadResponse;
+              this.caegorias = categoriasResponsa;
+              this.dataSource.data = ticketsResponse;
+            },
+            complete: () => { },
+            error: () => {
+              this.alertService.showError('Error', 'Ocurrió un error inesperado.');
+            }
+          });
+    }
+
+    loadData(){
+
+    }
   getPrioridadClass(prioridad: string) {
     switch (prioridad) {
       case 'Alta':
@@ -132,6 +183,14 @@ filtroTexto: string = '';
       default:
         return 'bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm';
     }
+  }
+
+  onFilterChange(){
+
+  }
+
+  verDetalle(id){
+    this.router.navigate(['/admin/ticket-detalle', id]);
   }
 
   filteredTickets() {

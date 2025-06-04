@@ -1,23 +1,61 @@
 <div class="flex w-full flex-auto flex-col">
 
-  <!-- Main -->
-  <!-- CONTENT GOES HERE -->
-  <div class="relative flex flex-0 flex-col border-b px-6 py-8 sm:flex-row sm:items-center sm:justify-between md:px-8">
+     <div
+        class="relative flex flex-0 flex-col border-b px-6 py-8 sm:flex-row sm:items-center sm:justify-between md:px-8">
+        <!-- Loader -->
+        @if (isLoading) {
+        <div class="absolute inset-x-0 bottom-0">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+        }
+        <!-- Title -->
+        <div>
+            <h2 class="text-3xl font-semibold leading-8 tracking-tight">
+                Tickets por asignar
+            </h2>
+        </div>
+        <!-- Actions -->
+        <div class="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <!-- Select de Organización -->
+            <mat-form-field class="fuse-mat-dense min-w-64 sm:mr-4" style="flex: 1;">
+                <mat-label>Organización</mat-label>
+                <mat-select [formControl]="organizacionControl" (selectionChange)="onFilterChange()">
+                    <mat-option [value]="'0'">Todas</mat-option>
+                    <mat-option *ngFor="let org of organizaciones" [value]="org.id">
+                        {{ org.nombre }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
 
-    <!-- Title -->
-    <div>
-      <h2 class="text-3xl font-semibold leading-8 tracking-tight">
-        Tickets abiertos
-      </h2>
+            <mat-form-field class="fuse-mat-dense min-w-64 sm:mr-4" style="flex: 1;">
+                <mat-label>Categoria</mat-label>
+                <mat-select [formControl]="categoriaControl" (selectionChange)="onFilterChange()">
+                    <mat-option [value]="'0'">Todas</mat-option>
+                    <mat-option *ngFor="let org of caegorias" [value]="org.id">
+                        {{ org.nombre }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="fuse-mat-dense min-w-64 sm:mr-4" style="flex: 1;">
+                <mat-label>Prioridad</mat-label>
+                <mat-select [formControl]="prioridadControl" (selectionChange)="onFilterChange()">
+                    <mat-option [value]="'0'">Todas</mat-option>
+                    <mat-option *ngFor="let org of prioridades" [value]="org.id">
+                        {{ org.nombre }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Búsqueda -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Buscar'" />
+            </mat-form-field>
+        </div>
+
+        <!-- Tabla de Organizaciones -->
     </div>
-    <!-- Actions -->
-    <div class="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-
-
-    </div>
-
-    <!-- Tabla de Organizaciones -->
-  </div>
 
   <div class="p-4">
     <div class="mx-auto flex w-full max-w-screen-xl flex-wrap p-3 ">
@@ -25,7 +63,7 @@
         <!-- Recent transactions table -->
         <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl shadow xl:col-span-2">
           <div class="overflow-auto">
-            <table mat-table [dataSource]="filteredTickets()" class="mat-elevation-z1 w-full min-w-[1000px]">
+            <table mat-table [dataSource]="dataSource"  class="mat-elevation-z1 w-full min-w-[1000px]">
 
               <!-- Columnas -->
               <ng-container matColumnDef="folio">
@@ -75,8 +113,8 @@
               <ng-container matColumnDef="contacto">
                 <th mat-header-cell *matHeaderCellDef>Contacto</th>
                 <td mat-cell *matCellDef="let ticket">
-                  {{ ticket.contacto.nombre }}<br />
-                  <small>{{ ticket.contacto.telefono }}</small>
+                  {{ ticket.contactoNombre }}<br />
+                  <small>{{ ticket.contactoTelefono }}</small>
                 </td>
               </ng-container>
 
@@ -91,7 +129,7 @@
 
               <ng-container matColumnDef="fechaCreacion">
                 <th mat-header-cell *matHeaderCellDef>Desde</th>
-                <td mat-cell *matCellDef="let ticket">{{ ticket.fechaCreacion | date:'shortDate' }}</td>
+                <td mat-cell *matCellDef="let ticket">{{ ticket.desde | date:'shortDate' }}</td>
               </ng-container>
 
               <ng-container matColumnDef="asignado">
@@ -111,7 +149,7 @@
                     </button>
 
                     <!-- Ver detalles -->
-                    <button mat-icon-button color="primary" matTooltip="Ver detalles">
+                    <button mat-icon-button color="primary" matTooltip="Ver detalles" (click)="verDetalle(ticket.id)">
                       <mat-icon>visibility</mat-icon>
                     </button>
 
