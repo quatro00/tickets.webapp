@@ -106,7 +106,8 @@ export const appRoutes: Route[] = [
             initialData: initialDataResolver
         },
         children: [
-            { path: 'home', loadChildren: () => import('app/modules/admin/home/home.route') },
+            { path: 'home', loadChildren: () => import('app/modules/responsable/home/home.route')},
+            { path: 'nuevo-ticket', loadChildren: () => import('app/modules/responsable/registrar-ticket/registrar-ticket.route')},
         ]
     },
 

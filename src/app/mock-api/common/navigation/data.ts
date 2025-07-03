@@ -134,7 +134,14 @@ export const defaultNavigation_responsable: FuseNavigationItem[] = [
         type : 'basic',
         icon : 'heroicons_outline:home',
         link : '/responsable/home'
-    }
+    },
+    {
+        id   : 'nuevo-ticket',
+        title: 'Nuevo ticket',
+        type : 'basic',
+        icon : 'heroicons_outline:plus-circle',
+        link : '/responsable/nuevo-ticket'
+    },
 ];
 export const compactNavigation_responsable: FuseNavigationItem[] = [
     {
