@@ -9,15 +9,21 @@ import {
     futuristicNavigation_admin,
     horizontalNavigation_admin,
 
-    compactNavigation_colaborador,
-    defaultNavigation_colaborador,
-    futuristicNavigation_colaborador,
-    horizontalNavigation_colaborador,
+    compactNavigation_responsable,
+    defaultNavigation_responsable,
+    futuristicNavigation_responsable,
+    horizontalNavigation_responsable,
+
+   
 
     compactNavigation,
     defaultNavigation,
     futuristicNavigation,
     horizontalNavigation,
+    compactNavigation_supervisor,
+    defaultNavigation_supervisor,
+    futuristicNavigation_supervisor,
+    horizontalNavigation_supervisor,
 } from 'app/mock-api/common/navigation/data';
 import { cloneDeep } from 'lodash-es';
 
@@ -69,9 +75,11 @@ export class NavigationMockApi {
         if (userData) {
             roles = JSON.parse(userData).roles;
         }
+        console.log(roles);
         if (roles != null) {
             if (roles.indexOf('Administrador') != -1 && rol == '') { rol = 'Administrador' }
             if (roles.indexOf('Supervisor') != -1 && rol == '') { rol = 'Supervisor' }
+            if (roles.indexOf('Responsable de area') != -1 && rol == '') { rol = 'Responsable de area' }
         }
 
         if (rol == 'Administrador') {
@@ -81,13 +89,19 @@ export class NavigationMockApi {
             this._horizontalNavigation = horizontalNavigation_admin;
         }
 
-        if (rol == 'Colaborador') {
-            this._compactNavigation = compactNavigation_colaborador;
-            this._defaultNavigation = defaultNavigation_colaborador;
-            this._futuristicNavigation = futuristicNavigation_colaborador;
-            this._horizontalNavigation = horizontalNavigation_colaborador;
+        if (rol == 'Responsable de area') {
+            this._compactNavigation = compactNavigation_responsable;
+            this._defaultNavigation = defaultNavigation_responsable;
+            this._futuristicNavigation = futuristicNavigation_responsable;
+            this._horizontalNavigation = horizontalNavigation_responsable;
         }
 
+        if (rol == 'Supervisor') {
+            this._compactNavigation = compactNavigation_supervisor;
+            this._defaultNavigation = defaultNavigation_supervisor;
+            this._futuristicNavigation = futuristicNavigation_supervisor;
+            this._horizontalNavigation = horizontalNavigation_supervisor;
+        }
         // -----------------------------------------------------------------------------------------------------
         // @ Navigation - GET
         // -----------------------------------------------------------------------------------------------------

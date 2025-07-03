@@ -32,4 +32,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: dist/tickets/browser/
           exclude: |
-           **/assets/**
+           **/images/**

@@ -97,5 +97,17 @@ export const appRoutes: Route[] = [
             { path: 'equipos-de-trabajo', loadChildren: () => import('app/modules/admin/equipos-de-trabajo/equipos-de-trabajo.route') },
         ]
     },
+    {
+        path: 'responsable',
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        component: LayoutComponent,
+        resolve: {
+            initialData: initialDataResolver
+        },
+        children: [
+            { path: 'home', loadChildren: () => import('app/modules/admin/home/home.route') },
+        ]
+    },
 
 ];

@@ -126,10 +126,46 @@ export const horizontalNavigation_admin: FuseNavigationItem[] = [
     }
 ];
 
-//menus para el colaborador
+//menus para el responsable
+export const defaultNavigation_responsable: FuseNavigationItem[] = [
+    {
+        id   : 'home',
+        title: 'Home',
+        type : 'basic',
+        icon : 'heroicons_outline:home',
+        link : '/responsable/home'
+    }
+];
+export const compactNavigation_responsable: FuseNavigationItem[] = [
+    {
+        id   : 'example',
+        title: 'Example super',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : '/example'
+    }
+];
+export const futuristicNavigation_responsable: FuseNavigationItem[] = [
+    {
+        id   : 'example',
+        title: 'Example super',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : '/example'
+    }
+];
+export const horizontalNavigation_responsable: FuseNavigationItem[] = [
+    {
+        id   : 'example',
+        title: 'Example super',
+        type : 'basic',
+        icon : 'heroicons_outline:chart-pie',
+        link : '/example'
+    }
+];
 
-
-export const defaultNavigation_colaborador: FuseNavigationItem[] = [
+//menus para el supervisor
+export const defaultNavigation_supervisor: FuseNavigationItem[] = [
     {
         id   : 'example',
         title: 'Example super',
@@ -138,7 +174,7 @@ export const defaultNavigation_colaborador: FuseNavigationItem[] = [
         link : '/example'
     }
 ];
-export const compactNavigation_colaborador: FuseNavigationItem[] = [
+export const compactNavigation_supervisor: FuseNavigationItem[] = [
     {
         id   : 'example',
         title: 'Example super',
@@ -147,7 +183,7 @@ export const compactNavigation_colaborador: FuseNavigationItem[] = [
         link : '/example'
     }
 ];
-export const futuristicNavigation_colaborador: FuseNavigationItem[] = [
+export const futuristicNavigation_supervisor: FuseNavigationItem[] = [
     {
         id   : 'example',
         title: 'Example super',
@@ -156,7 +192,7 @@ export const futuristicNavigation_colaborador: FuseNavigationItem[] = [
         link : '/example'
     }
 ];
-export const horizontalNavigation_colaborador: FuseNavigationItem[] = [
+export const horizontalNavigation_supervisor: FuseNavigationItem[] = [
     {
         id   : 'example',
         title: 'Example super',

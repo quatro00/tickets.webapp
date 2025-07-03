@@ -27,6 +27,11 @@ export class EquipoDeTrabajoService{
     return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetAgentesResponsables`, {params});
   }
 
+  GetAgentesByTicket(ticketId:string): Observable<any> {
+    const params = new HttpParams().set('ticketId', ticketId);
+    return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetAgentesByTicket`, {params});
+  }
+
   AsignarAgentes(request: any): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/${this.service}/AsignarAgentes`, request);
   }

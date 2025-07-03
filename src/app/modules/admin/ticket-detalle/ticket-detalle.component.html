@@ -12,7 +12,7 @@
       <!-- Title -->
       <div class="mt-2">
         <h2 class="truncate text-3xl font-extrabold leading-7 tracking-tight sm:leading-10 md:text-4xl">
-          Ticket # 10
+          Ticket # {{ticket.folio}}
         </h2>
       </div>
     </div>
@@ -70,7 +70,7 @@
 
           <div>
             <span class="font-medium"><b>Desde:</b></span>
-            <div class="text-base text-gray-800">{{ ticket.fechaDesde | date:'mediumDate' }}</div>
+            <div class="text-base text-gray-800">{{ ticket.desdeCuandoSePresenta | date:'mediumDate' }}</div>
           </div>
 
           <div>
@@ -89,17 +89,17 @@
 
           <div>
             <span class="font-medium"><b>Nombre:</b></span>
-            <div class="text-base text-gray-800">{{ ticket.area }}</div>
+            <div class="text-base text-gray-800">{{ ticket.contactoNombre }}</div>
           </div>
 
           <div>
             <span class="font-medium"><b>Telefono:</b></span>
-            <div class="text-base text-gray-800">{{ ticket.area }}</div>
+            <div class="text-base text-gray-800">{{ ticket.contactoTelefono }}</div>
           </div>
 
           <div>
             <span class="font-medium"><b>Correo electronico:</b></span>
-            <div class="text-base text-gray-800">{{ ticket.area }}</div>
+            <div class="text-base text-gray-800">{{ ticket.contactoCorreo }}</div>
           </div>
 
           <div
@@ -109,35 +109,32 @@
 
           <div>
             <span class="font-medium"><b>Nombre:</b></span>
-            <div class="text-base text-gray-800">{{ ticket.area }}</div>
+            <div class="text-base text-gray-800">{{ ticket.asignadoNombre }}</div>
           </div>
 
           <div>
             <span class="font-medium"><b>Telefono:</b></span>
-            <div class="text-base text-gray-800">{{ ticket.area }}</div>
+            <div class="text-base text-gray-800">{{ ticket.asignadoTelefono }}</div>
           </div>
 
           <div>
             <span class="font-medium"><b>Correo electronico:</b></span>
-            <div class="text-base text-gray-800">{{ ticket.area }}</div>
+            <div class="text-base text-gray-800">{{ ticket.asignadoCorreo }}</div>
           </div>
 
-          
-          <div
-            class="col-span-1 md:col-span-4 w-full text-2xl font-semibold leading-tight text-primary-500">
-            
-            <div class="mt-8 flex justify-end gap-4">
-    <button mat-stroked-button color="primary">Editar</button>
-    <button mat-flat-button color="accent">Asignar</button>
-    <button mat-raised-button color="warn">Cerrar Ticket</button>
-</div>
+          <div class="col-span-1 md:col-span-4 w-full text-2xl font-semibold leading-tight text-primary-500">
 
+            <div class="mt-8 flex justify-end gap-4">
+              
+              <button mat-flat-button color="accent" (click)="asignarTicket(ticket)">Asignar</button>
+              <button mat-flat-button color="primary" (click)="cambiarEstatusTicket()">Cambiar estatus</button>
+            </div>
           </div>
 
 
         </div>
 
-        
+
       </fuse-card>
 
       <!-- Columna derecha: múltiples tarjetas apiladas -->
@@ -149,165 +146,103 @@
               Historial de mensajes
             </div>
             <ng-container fuseCardExpansion>
-              <div class="max-h-120 overflow-y-auto">
+              <div class="overflow-y-auto max-h-[300px] min-h-[150px] pr-2">
+
                 <div class="relative mx-4 my-6 flex flex-col sm:mx-8">
-                  <div class="flex items-start">
+
+
+
+                  <div class="flex items-start" *ngFor="let mensaje of ticket.mensajes">
+                    <!-- Avatar del usuario -->
                     <img class="mr-4 h-8 w-8 rounded-full" src="images/avatars/male-05.jpg" alt="Card cover image" />
+
+                    <!-- Contenido del mensaje -->
                     <div class="mt-0.5 flex flex-col">
+                      <!-- Texto del mensaje -->
                       <span>
-                        <b>Rutherford Brannan</b> Oh, I’m in..
-                        Let’s arrange a trip for the next
-                        weekend if you want!
+                        <b>{{ mensaje.userName }} - {{ mensaje.nombre }}</b> {{ mensaje.mensaje }}
                       </span>
-                      <div class="text-secondary mt-2 flex items-center text-sm">
-                        <span class="mr-2 cursor-pointer hover:underline">Like</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Reply</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Hide replies</span>
-                        <span class="mr-2">&bull;</span>
-                        <span>17 min</span>
+                      <span class="text-sm text-gray-500">
+                        {{ mensaje.fecha | date:'dd/MM/yyyy HH:mm' }}
+                      </span>
+                      <!-- Archivos adjuntos (si existen) -->
+                      <div *ngIf="mensaje.archivos?.length > 0" class="mt-2 space-y-1">
+                        <div class="flex items-center" *ngFor="let archivo of mensaje.archivos">
+                          <!-- Ícono de archivo -->
+                          <div class="mr-2 h-6 w-6 flex items-center justify-center rounded-full bg-gray-200">
+                            <svg class="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                              <path
+                                d="M8 2a2 2 0 00-2 2v12a2 2 0 002 2h4a2 2 0 002-2V7.414A2 2 0 0013.414 6L10 2H8zM10 4.5L13.5 8H10V4.5z" />
+                            </svg>
+                          </div>
+
+                          <!-- Nombre del archivo y enlace de descarga -->
+                          <a [href]="archivo.rutaPublica" [attr.download]="archivo.nombre"
+                            class="text-sm text-blue-600 hover:underline">
+                            {{ archivo.nombre }}
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="ml-12 mt-8 flex items-start">
-                    <img class="mr-4 h-8 w-8 rounded-full" src="images/avatars/female-01.jpg" alt="Card cover image" />
-                    <div class="mt-0.5 flex flex-col">
-                      <span>
-                        <b>Caroline Lundu</b> Yes!! Let's talk
-                        about it on lunch!
-                      </span>
-                      <div class="text-secondary mt-2 flex items-center text-sm">
-                        <span class="mr-2 cursor-pointer hover:underline">Like</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Reply</span>
-                        <span class="mr-2">&bull;</span>
-                        <span>15 min</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ml-12 mt-8 flex items-start">
-                    <img class="mr-4 h-8 w-8 rounded-full" src="images/avatars/female-08.jpg" alt="Card cover image" />
-                    <div class="mt-0.5 flex flex-col">
-                      <span>
-                        <b>Barbara Cotilla</b> Count me in !!!
-                      </span>
-                      <div class="text-secondary mt-2 flex items-center text-sm">
-                        <span class="mr-2 cursor-pointer hover:underline">Like</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Reply</span>
-                        <span class="mr-2">&bull;</span>
-                        <span>12 min</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mt-8 flex items-start">
-                    <img class="mr-4 h-8 w-8 rounded-full" src="images/avatars/male-11.jpg" alt="Card cover image" />
-                    <div class="mt-0.5 flex flex-col">
-                      <span>
-                        <b>Alan Marti</b> The color of the sky
-                        doesn’t look natural at all, do you
-                        really think this is natural? I’d say
-                        Photoshop! Your trip isn't going to
-                        worth it since you won't be seeing this
-                        exact sky.
-                      </span>
-                      <div class="text-secondary mt-2 flex items-center text-sm">
-                        <span class="mr-2 cursor-pointer hover:underline">Like</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Reply</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Hide replies</span>
-                        <span class="mr-2">&bull;</span>
-                        <span>24 min</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ml-12 mt-8 flex items-start">
-                    <img class="mr-4 h-8 w-8 rounded-full" src="images/avatars/female-01.jpg" alt="Card cover image" />
-                    <div class="mt-0.5 flex flex-col">
-                      <span>
-                        <b>Caroline Lundu</b> Hey, Alan! You
-                        must be fun at parties!
-                      </span>
-                      <div class="text-secondary mt-2 flex items-center text-sm">
-                        <span class="mr-2 cursor-pointer hover:underline">Like</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Reply</span>
-                        <span class="mr-2">&bull;</span>
-                        <span>22 min</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ml-12 mt-8 flex items-start">
-                    <img class="mr-4 h-8 w-8 rounded-full" src="images/avatars/male-11.jpg" alt="Card cover image" />
-                    <div class="mt-0.5 flex flex-col">
-                      <span>
-                        <b>Alan Marti</b> Caroline, I'm telling
-                        the truth, and if you cannot stand the
-                        truth, maybe we shouldn't be friends
-                        anymore...
-                      </span>
-                      <div class="text-secondary mt-2 flex items-center text-sm">
-                        <span class="mr-2 cursor-pointer hover:underline">Like</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Reply</span>
-                        <span class="mr-2">&bull;</span>
-                        <span>20 min</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ml-12 mt-8 flex items-start">
-                    <img class="mr-4 h-8 w-8 rounded-full" src="images/avatars/female-01.jpg" alt="Card cover image" />
-                    <div class="mt-0.5 flex flex-col">
-                      <span>
-                        <b>Caroline Lundu</b> Dude! Relax! I'm
-                        just messing with you...
-                      </span>
-                      <div class="text-secondary mt-2 flex items-center text-sm">
-                        <span class="mr-2 cursor-pointer hover:underline">Like</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Reply</span>
-                        <span class="mr-2">&bull;</span>
-                        <span>18 min</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ml-12 mt-8 flex items-start">
-                    <img class="mr-4 h-8 w-8 rounded-full" src="images/avatars/male-11.jpg" alt="Card cover image" />
-                    <div class="mt-0.5 flex flex-col">
-                      <span>
-                        <b>Alan Marti</b> Sorry! I had a bad
-                        morning, let's talk about this in couple
-                        hours, I need to relax a bit :(
-                      </span>
-                      <div class="text-secondary mt-2 flex items-center text-sm">
-                        <span class="mr-2 cursor-pointer hover:underline">Like</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Reply</span>
-                        <span class="mr-2">&bull;</span>
-                        <span>16 min</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mt-8 flex items-start">
-                    <img class="mr-4 h-8 w-8 rounded-full" src="images/avatars/female-05.jpg" alt="Card cover image" />
-                    <div class="mt-0.5 flex flex-col">
-                      <span>
-                        <b>Marleah Eagleston</b> Count me in,
-                        too!
-                      </span>
-                      <div class="text-secondary mt-2 flex items-center text-sm">
-                        <span class="mr-2 cursor-pointer hover:underline">Like</span>
-                        <span class="mr-2 cursor-pointer hover:underline">Reply</span>
-                        <span class="mr-2">&bull;</span>
-                        <span>34 min</span>
-                      </div>
-                    </div>
-                  </div>
+
                 </div>
               </div>
-              
+
             </ng-container>
             <div class="mt-4 flex justify-end items-start sm:mt-0 w-full">
-   
-    <button class="px-3 sm:-mr-3" mat-button>
-        Agregar mensaje
-    </button>
-</div>
+
+              <button (click)="agregarMensaje()" class="px-3 sm:-mr-3" mat-flat-button color="primary">
+                Agregar mensaje
+              </button>
+            </div>
           </div>
 
-          
+
+        </fuse-card>
+
+        <fuse-card class="p-8 bg-card text-sm">
+          <div class="grid grid-cols-1 text-gray-700 w-full">
+            <div class="text-2xl font-semibold leading-tight text-primary-500 border-b pb-4 mb-4">
+              Archivos
+            </div>
+            <ng-container fuseCardExpansion>
+              <div class="max-h-120 overflow-y-auto">
+                <div class="relative mx-4 my-6 flex flex-col sm:mx-8">
+                  <div class="flex items-start" *ngFor="let archivo of ticket.archivos">
+                    <!-- Ícono de archivo -->
+                    <div class="mr-4 h-8 w-8 flex items-center justify-center rounded-full bg-gray-200">
+                      <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M8 2a2 2 0 00-2 2v12a2 2 0 002 2h4a2 2 0 002-2V7.414A2 2 0 0013.414 6L10 2H8zM10 4.5L13.5 8H10V4.5z" />
+                      </svg>
+                    </div>
+
+                    <div class="mt-0.5 flex flex-col">
+                      <span>
+                        <b>
+                          <a [href]="archivo.url" [attr.download]="archivo.nombre">{{ archivo.nombre }}</a>
+                        </b>
+                      </span>
+                      <span class="text-sm text-gray-500">
+                        {{ archivo.fecha | date:'dd/MM/yyyy HH:mm' }}
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </ng-container>
+            <div class="mt-4 flex justify-end items-start sm:mt-0 w-full">
+
+              <button (click)="agregarArchivo()" class="px-3 sm:-mr-3" mat-flat-button color="primary">
+                Agregar archivo
+              </button>
+            </div>
+          </div>
+
+
         </fuse-card>
 
       </div>
