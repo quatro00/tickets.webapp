@@ -112,5 +112,19 @@ export const appRoutes: Route[] = [
             { path: 'ticket-detalle/:id', loadChildren: () => import('app/modules/responsable/ticket-detalle/ticket-detalle.route') },
         ]
     },
-
+    {
+        path: 'supervisor',
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
+        component: LayoutComponent,
+        resolve: {
+            initialData: initialDataResolver
+        },
+        children: [
+            { path: 'home', loadChildren: () => import('app/modules/supervisor/home/home.route')},
+            { path: 'tickets-por-asignar', loadChildren: () => import('app/modules/supervisor/tickets-por-asignar/tickets-por-asignar.route')},
+            { path: 'tickets-asignados', loadChildren: () => import('app/modules/supervisor/tickets-asignados/tickets-asignados.route')},
+            { path: 'ticket-detalle/:id', loadChildren: () => import('app/modules/supervisor/ticket-detalle/ticket-detalle.route') },
+        ]
+    },
 ];

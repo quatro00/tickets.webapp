@@ -180,13 +180,27 @@ export const horizontalNavigation_responsable: FuseNavigationItem[] = [
 
 //menus para el supervisor
 export const defaultNavigation_supervisor: FuseNavigationItem[] = [
-    {
-        id   : 'example',
-        title: 'Example super',
+   {
+        id   : 'home',
+        title: 'Home',
         type : 'basic',
-        icon : 'heroicons_outline:chart-pie',
-        link : '/example'
-    }
+        icon : 'heroicons_outline:home',
+        link : '/supervisor/home'
+    },
+    {
+        id   : 'TicketsPorAsignar',
+        title: 'Tickets por asignar',
+        type : 'basic',
+        icon : 'heroicons_outline:ticket',
+        link : '/supervisor/tickets-por-asignar'
+    },
+    {
+        id   : 'ticketsAsignados',
+        title: 'Tickets asignados',
+        type : 'basic',
+        icon : 'heroicons_outline:ticket',
+        link : '/supervisor/tickets-asignados'
+    },
 ];
 export const compactNavigation_supervisor: FuseNavigationItem[] = [
     {
