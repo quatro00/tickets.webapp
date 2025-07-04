@@ -16,7 +16,7 @@ import { Responsable_CatCategoriaService } from 'app/services/responsable/respon
 import { Responsable_CatPrioridadService } from 'app/services/responsable/responsable_catprioridad.service';
 import { forkJoin } from 'rxjs';
 import { Responsable_AreaService } from 'app/services/responsable/responsable_area.service';
-import { Responsable_OrganizacionService } from 'app/services/responsable/organizacion.service';
+import { Responsable_OrganizacionService } from 'app/services/responsable/responsable_organizacion.service';
 import { SeleccionAreaComponent } from 'app/modals/seleccion-area/seleccion-area.component';
 import { Responsable_TicketService } from 'app/services/responsable/responsable_ticket.service';
 import { MatTooltipModule } from '@angular/material/tooltip';

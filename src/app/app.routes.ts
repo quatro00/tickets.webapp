@@ -108,6 +108,8 @@ export const appRoutes: Route[] = [
         children: [
             { path: 'home', loadChildren: () => import('app/modules/responsable/home/home.route')},
             { path: 'nuevo-ticket', loadChildren: () => import('app/modules/responsable/registrar-ticket/registrar-ticket.route')},
+            { path: 'tickets-abiertos', loadChildren: () => import('app/modules/responsable/tickets-abiertos/tickets-abiertos.route')},
+            { path: 'ticket-detalle/:id', loadChildren: () => import('app/modules/responsable/ticket-detalle/ticket-detalle.route') },
         ]
     },
 

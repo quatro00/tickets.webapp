@@ -24,7 +24,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-agregar-mensaje',
   imports: [
-    MatDialogModule, 
+    MatDialogModule,
     MatSelectModule,
     MatFormFieldModule,
     MatOptionModule,
@@ -57,19 +57,22 @@ export class AgregarMensajeComponent {
   ) {
     this.form = this.fb.group({
       mensaje: ['', [Validators.required]],
-      archivos: [null]
+      archivos: [null, null]
     });
   }
 
   enviar(): void {
+    console.log(this.form.value.archivos);
     if (this.form.invalid) return;
     console.log(this.data);
     const formData = new FormData();
     formData.append('mensaje', this.form.value.mensaje);
+    if (this.form.value.archivos != null) {
+      this.form.value.archivos.forEach((archivo, index) => {
+        formData.append('Archivos', archivo); // Usa el mismo nombre si es un arreglo en backend
+      });
+    }
 
-    this.form.value.archivos.forEach((archivo, index) => {
-      formData.append('Archivos', archivo); // Usa el mismo nombre si es un arreglo en backend
-    });
 
 
     formData.append('ticketId', this.data.toString());

@@ -142,6 +142,13 @@ export const defaultNavigation_responsable: FuseNavigationItem[] = [
         icon : 'heroicons_outline:plus-circle',
         link : '/responsable/nuevo-ticket'
     },
+    {
+        id   : 'ticketsAbiertos',
+        title: 'Mis tickets abiertos',
+        type : 'basic',
+        icon : 'heroicons_outline:ticket',
+        link : '/responsable/tickets-abiertos'
+    },
 ];
 export const compactNavigation_responsable: FuseNavigationItem[] = [
     {

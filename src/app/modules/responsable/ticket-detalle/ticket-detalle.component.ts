@@ -30,16 +30,11 @@ import { FuseCardComponent } from '@fuse/components/card';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { CommonModule } from '@angular/common';
-import { TicketService } from 'app/services/admin/ticket.service';
+import { Responsable_TicketService } from 'app/services/responsable/responsable_ticket.service';
 import { AlertService } from 'app/services/alert.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AgregarMensajeComponent } from 'app/modals/agregar-mensaje/agregar-mensaje.component';
 import { AgregarArchivoComponent } from 'app/modals/agregar-archivo/agregar-archivo.component';
-import { EditarTicketComponent } from 'app/modals/editar-ticket/editar-ticket.component';
-import { AsignarTicketComponent } from 'app/modals/asignar-ticket/asignar-ticket.component';
-import { CerrarTicketComponent } from 'app/modals/cerrar-ticket/cerrar-ticket.component';
-import { CambiarEstatusTicketComponent } from 'app/modals/cambiar-estatus-ticket/cambiar-estatus-ticket.component';
-import { EquipoDeTrabajoService } from 'app/services/admin/equipo-de-trabajo.service';
 
 @Component({
   selector: 'app-ticket-detalle',
@@ -69,8 +64,10 @@ import { EquipoDeTrabajoService } from 'app/services/admin/equipo-de-trabajo.ser
     MatTooltipModule,
     MatCardModule,
     MatChipsModule,
-    TitleCasePipe,],
-  templateUrl: './ticket-detalle.component.html'
+    TitleCasePipe,
+  ],
+  templateUrl: './ticket-detalle.component.html',
+  styleUrl: './ticket-detalle.component.scss'
 })
 export class TicketDetalleComponent implements OnInit {
 
@@ -122,8 +119,7 @@ export class TicketDetalleComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private ticketService: TicketService,
-    private equipoTrabajoService: EquipoDeTrabajoService,
+    private ticketService: Responsable_TicketService,
     private alertService: AlertService,
     private dialog: MatDialog
   ) { }
@@ -170,89 +166,7 @@ export class TicketDetalleComponent implements OnInit {
     });
   }
 
-  cambiarEstatusTicket() {
-    this.ticketService.GetEstatusTicket()
-      .subscribe({
-        next: (response) => {
-          console.log(response);
-          const dialogRef = this.dialog.open(CambiarEstatusTicketComponent, {
-            width: '500px',
-            data: {
-              ticketId: this.id,
-              estatusTickets: response
-            },
-          });
 
-          dialogRef.afterClosed().subscribe((result: any | null) => {
-            if (result) {
-              this.ticketService.CambiarEstatus(result)
-                .subscribe({
-                  next: (response) => { this.loadData(); },
-                  error: (err) => { this.alertService.showError('Error', err.error); },
-                })
-            }
-          });
-
-        },
-        error: (err) => { this.alertService.showError('Error', err.error); },
-      })
-
-
-
-  }
-
-  cerrarTicket() {
-    const dialogRef = this.dialog.open(CerrarTicketComponent, {
-      width: '500px',
-      data: this.id,
-    });
-
-    dialogRef.afterClosed().subscribe((result: any | null) => {
-      if (result) {
-        console.log(result);
-      }
-    });
-  }
-
-  asignarTicket(ticket) {
-    console.log(ticket);
-    this.equipoTrabajoService.GetAgentesByTicket(ticket.id)
-      .subscribe({
-        next: (response) => {
-          const dialogRef = this.dialog.open(AsignarTicketComponent, {
-            width: '500px',
-            data: { ticketId: ticket.id, agentes: response },
-          });
-
-          dialogRef.afterClosed().subscribe((result: any | null) => {
-            if (result) {
-              this.ticketService.AsignarTicket(result)
-                .subscribe({
-                  next: (response) => { this.loadData(); },
-                  error: (err) => { this.alertService.showError('Error', err.error); },
-                })
-            }
-          });
-
-        },
-        error: (err) => { this.alertService.showError('Error', err.error); },
-      })
-
-
-  }
-
-  editarTicket() {
-    const dialogRef = this.dialog.open(EditarTicketComponent, {
-      width: '500px',
-      data: this.id,
-    });
-
-    dialogRef.afterClosed().subscribe((result: any | null) => {
-      if (result) {
-        console.log(result);
-      }
-    });
-  }
   agregarArchivo() {
     const dialogRef = this.dialog.open(AgregarArchivoComponent, {
       width: '500px',
