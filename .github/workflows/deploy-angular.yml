@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Compilar aplicación Angular
-        run: run: npm run build -- --configuration=production --base-href ./
+        run: npm run build -- --configuration=production --base-href ./
 
       - name: Subir archivos vía FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
