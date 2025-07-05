@@ -119,9 +119,20 @@
 
           <div class="col-span-1 md:col-span-4 w-full text-2xl font-semibold leading-tight text-primary-500">
 
-            <div class="mt-8 flex justify-end gap-4">
-              
-              <button mat-flat-button color="accent" (click)="asignarTicket(ticket)">Asignar</button>
+            <div *ngIf="ticket.estatus == 'Nuevo'" class="mt-8 flex justify-end gap-4">
+              <button mat-flat-button color="warn" (click)="cancelarTicket(ticket)">Cancelar ticket</button>
+              <button mat-flat-button color="primary" (click)="asignarTicket(ticket)">Asignar</button>
+            </div>
+
+            <div *ngIf="ticket.estatus == 'Asignado'" class="mt-8 flex justify-end gap-4">
+              <button mat-flat-button color="accent" (click)="enEsperaTicket(ticket)">En espera</button>
+              <button mat-flat-button color="primary" (click)="asignarTicket(ticket)">Asignar</button>
+              <button mat-flat-button color="warn" (click)="resolverTicket(ticket)">Resolver ticket</button>
+            </div>
+            
+            <div *ngIf="ticket.estatus == 'En espera'" class="mt-8 flex justify-end gap-4">
+              <button mat-flat-button color="primary" (click)="resolverTicket(ticket)">Resolver ticket</button>
+              <button mat-flat-button color="warn" (click)="cancelarTicket(ticket)">Cancelar ticket</button>
             </div>
           </div>
 
@@ -184,7 +195,7 @@
               </div>
 
             </ng-container>
-            <div class="mt-4 flex justify-end items-start sm:mt-0 w-full">
+            <div *ngIf="ticket.estatus != 'Cancelado'" class="mt-4 flex justify-end items-start sm:mt-0 w-full">
 
               <button (click)="agregarMensaje()" class="px-3 sm:-mr-3" mat-flat-button color="primary">
                 Agregar mensaje
@@ -228,7 +239,7 @@
               </div>
 
             </ng-container>
-            <div class="mt-4 flex justify-end items-start sm:mt-0 w-full">
+            <div *ngIf="ticket.estatus != 'Cancelado'" class="mt-4 flex justify-end items-start sm:mt-0 w-full">
 
               <button (click)="agregarArchivo()" class="px-3 sm:-mr-3" mat-flat-button color="primary">
                 Agregar archivo

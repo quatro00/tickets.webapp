@@ -29,6 +29,10 @@ export class Supervisor_TicketService {
     return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetTicketsAbiertos`);
   }
 
+  GetTicketsAsignados():Observable<any>{
+    return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetTicketsAsignados`);
+  }
+
   VerDetalle(id:string): Observable<any> {
     //const params = new HttpParams().set('id', id);
     return this.http.get<any>(`${environment.apiUrl}/${this.service}/GetDetalle/${id}`);
@@ -38,4 +42,15 @@ export class Supervisor_TicketService {
     return this.http.post<any>(`${environment.apiUrl}/${this.service}/AsignarTicket`,request);
   }
 
+  CancelarTicket(request:any):Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/${this.service}/CancelarTicket`,request);
+  }
+
+  EnEsperaTicket(request:any):Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/${this.service}/EnEsperaTicket`,request);
+  }
+
+  ResolverTicket(request:any):Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/${this.service}/ResolverTicket`,request);
+  }
 }

@@ -40,6 +40,9 @@ import { AsignarTicketComponent } from 'app/modals/asignar-ticket/asignar-ticket
 import { CerrarTicketComponent } from 'app/modals/cerrar-ticket/cerrar-ticket.component';
 import { CambiarEstatusTicketComponent } from 'app/modals/cambiar-estatus-ticket/cambiar-estatus-ticket.component';
 import { Supervisor_EquipoDeTrabajoService } from 'app/services/supervisor/supervisor_equipo-de-trabajo.service';
+import { CancelarTicketComponent } from 'app/modals/cancelar-ticket/cancelar-ticket.component';
+import { EnEsperaTicketComponent } from 'app/modals/en-espera-ticket/en-espera-ticket.component';
+import { ResolverTicketComponent } from 'app/modals/resolver-ticket/resolver-ticket.component';
 @Component({
   selector: 'app-ticket-detalle',
   imports: [
@@ -175,6 +178,57 @@ export class TicketDetalleComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any | null) => {
       if (result) {
         console.log(result);
+      }
+    });
+  }
+
+  cancelarTicket(ticket) {
+    const dialogRef = this.dialog.open(CancelarTicketComponent, {
+      width: '500px',
+      data: { ticketId: ticket.id },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any | null) => {
+      if (result) {
+       this.ticketService.CancelarTicket(result)
+                .subscribe({
+                  next: (response) => { this.loadData(); },
+                  error: (err) => { this.alertService.showError('Error', err.error); },
+                })
+      }
+    });
+  }
+
+  enEsperaTicket(ticket) {
+    const dialogRef = this.dialog.open(EnEsperaTicketComponent, {
+      width: '500px',
+      data: { ticketId: ticket.id },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any | null) => {
+      if (result) {
+       this.ticketService.EnEsperaTicket(result)
+                .subscribe({
+                  next: (response) => { this.loadData(); },
+                  error: (err) => { this.alertService.showError('Error', err.error); },
+                })
+      }
+    });
+  }
+
+  resolverTicket(ticket) {
+    const dialogRef = this.dialog.open(ResolverTicketComponent, {
+      width: '500px',
+      data: { ticketId: ticket.id },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any | null) => {
+      if (result) {
+       this.ticketService.ResolverTicket(result)
+                .subscribe({
+                  next: (response) => { this.loadData(); },
+                  error: (err) => { this.alertService.showError('Error', err.error); },
+                })
       }
     });
   }
