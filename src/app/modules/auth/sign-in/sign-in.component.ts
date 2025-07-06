@@ -17,6 +17,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
+import { NavigationMockApi } from 'app/mock-api/common/navigation/api';
 
 @Component({
     selector: 'auth-sign-in',
@@ -54,7 +55,8 @@ export class AuthSignInComponent implements OnInit {
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
         private _router: Router,
-    ) {}
+        private navigationMockApiService: NavigationMockApi
+    ) { }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -67,14 +69,14 @@ export class AuthSignInComponent implements OnInit {
         // Create the form
         this.signInForm = this._formBuilder.group({
             email: [
-                'hughes.brian@company.com',
+                '',
                 //'',
                 [Validators.required
-                //    , Validators.email
+                    //    , Validators.email
                 ],
             ],
             password: [
-                'admin', 
+                '',
                 //'',
                 Validators.required],
             rememberMe: [''],
@@ -112,7 +114,9 @@ export class AuthSignInComponent implements OnInit {
                     this._activatedRoute.snapshot.queryParamMap.get(
                         'redirectURL'
                     ) || '/signed-in-redirect';
-                    
+
+                this.navigationMockApiService.registerHandlers();
+
                 // Navigate to the redirect url
                 this._router.navigateByUrl(redirectURL);
                 console.log(redirectURL);
