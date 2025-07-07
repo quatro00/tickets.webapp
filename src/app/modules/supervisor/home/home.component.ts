@@ -1,10 +1,11 @@
 import { CurrencyPipe, NgClass } from '@angular/common';
 import {
-    ChangeDetectionStrategy,
-    Component,
-    OnDestroy,
-    OnInit,
-    ViewEncapsulation,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -21,6 +22,10 @@ import { AnalyticsService } from './analytics.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DecimalPipe } from '@angular/common';
 import { DonaTicketsAreaComponent } from 'app/graficas/dona-tickets-area/dona-tickets-area.component';
+import { BarraTicketsAreaMesesComponent } from 'app/graficas/barra-tickets-area-meses/barra-tickets-area-meses.component';
+import { Supervisor_HomeService } from 'app/services/supervisor/supervisor_home.service';
+import { AlertService } from 'app/services/alert.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -28,235 +33,83 @@ import { DonaTicketsAreaComponent } from 'app/graficas/dona-tickets-area/dona-ti
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DonaTicketsAreaComponent,
+    BarraTicketsAreaMesesComponent,
     TranslocoModule,
-        MatIconModule,
-        MatButtonModule,
-        MatRippleModule,
-        MatMenuModule,
-        MatTabsModule,
-        MatButtonToggleModule,
-        NgApexchartsModule,
-        MatTableModule,
-        NgClass,
-        CurrencyPipe,
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    MatRippleModule,
+    MatMenuModule,
+    MatTabsModule,
+    MatButtonToggleModule,
+    NgApexchartsModule,
+    MatTableModule,
+    NgClass,
+    CurrencyPipe,
 
-        MatTooltipModule,
-        DecimalPipe,
+    MatTooltipModule,
+    DecimalPipe,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
 
-  chartVisitors: ApexOptions;
-    chartConversions: ApexOptions;
-    chartImpressions: ApexOptions;
-    chartVisits: ApexOptions;
-    chartVisitorsVsPageViews: ApexOptions;
-    chartNewVsReturning: ApexOptions = {
-            chart: {
-                animations: {
-                    speed: 400,
-                    animateGradually: {
-                        enabled: false,
-                    },
-                },
-                fontFamily: 'inherit',
-                foreColor: 'inherit',
-                height: '100%',
-                type: 'donut',
-                sparkline: {
-                    enabled: true,
-                },
-            },
-            colors: ['#3182CE', '#63B3ED'],
-            labels: ['New', 'Returning'],
-            plotOptions: {
-                pie: {
-                    customScale: 0.9,
-                    expandOnClick: false,
-                    donut: {
-                        size: '70%',
-                    },
-                },
-            },
-            series: [80, 20],
-            states: {
-                hover: {
-                    filter: {
-                        type: 'none',
-                    },
-                },
-                active: {
-                    filter: {
-                        type: 'none',
-                    },
-                },
-            },
-            tooltip: {
-                enabled: true,
-                fillSeriesColor: false,
-                theme: 'dark',
-                custom: ({
-                    seriesIndex,
-                    w,
-                }): string => `<div class="flex items-center h-8 min-h-8 max-h-8 px-3">
-                                                    <div class="w-3 h-3 rounded-full" style="background-color: ${w.config.colors[seriesIndex]};"></div>
-                                                    <div class="ml-2 text-md leading-none">${w.config.labels[seriesIndex]}:</div>
-                                                    <div class="ml-2 text-md font-bold leading-none">${w.config.series[seriesIndex]}%</div>
-                                                </div>`,
-            },
-        };;
-    chartGender: ApexOptions;
-    chartAge: ApexOptions;
-    chartLanguage: ApexOptions;
-    data: any = {
-        uniqueVisitors: 46085,
-        series: [80, 20],
-        labels: ['New', 'Returning'],
-    };
+  public nuevos:number = 0;
+  asignados:number = 0;
+  enEspera:number = 0;
+  porConfirmar:number = 0;
+  muestraGraficaMensual = false;
+  graficaMensual:any;
+  /**
+   * Constructor
+   */
+  constructor(
+    private _homeService: Supervisor_HomeService,
+    private alertService: AlertService,
+    private cdRef: ChangeDetectorRef,
+    private _router: Router
+  ) { }
 
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
+  ngOnInit(): void {
+    this._homeService.IndicadoresMensuales()
+    .subscribe({
+        next: (response) => {
+          this.graficaMensual = response;
+          console.log(this.graficaMensual);
+          this.muestraGraficaMensual = true;
+          this.cdRef.detectChanges();
+        },
+        complete: () => {
+          //this.btnLoading = false;
+        },
+        error: () => {
+          //this.btnLoading = false;
+          this.alertService.showError('Error', 'Ocurrió un error inesperado.');
+        }
+      })
 
-    /**
-     * Constructor
-     */
-    constructor(
-        private _analyticsService: AnalyticsService,
-        private _router: Router
-    ) {}
 
-    ngOnInit(): void {
-        // Get the data
-         // New vs. returning
-         console.log(this.chartNewVsReturning);
-        this.chartNewVsReturning = {
-            chart: {
-                animations: {
-                    speed: 400,
-                    animateGradually: {
-                        enabled: false,
-                    },
-                },
-                fontFamily: 'inherit',
-                foreColor: 'inherit',
-                height: '100%',
-                type: 'donut',
-                sparkline: {
-                    enabled: true,
-                },
-            },
-            colors: ['#3182CE', '#63B3ED'],
-            labels: ['New', 'Returning'],
-            plotOptions: {
-                pie: {
-                    customScale: 0.9,
-                    expandOnClick: false,
-                    donut: {
-                        size: '70%',
-                    },
-                },
-            },
-            series: [80, 20],
-            states: {
-                hover: {
-                    filter: {
-                        type: 'none',
-                    },
-                },
-                active: {
-                    filter: {
-                        type: 'none',
-                    },
-                },
-            },
-            tooltip: {
-                enabled: true,
-                fillSeriesColor: false,
-                theme: 'dark',
-                custom: ({
-                    seriesIndex,
-                    w,
-                }): string => `<div class="flex items-center h-8 min-h-8 max-h-8 px-3">
-                                                    <div class="w-3 h-3 rounded-full" style="background-color: ${w.config.colors[seriesIndex]};"></div>
-                                                    <div class="ml-2 text-md leading-none">${w.config.labels[seriesIndex]}:</div>
-                                                    <div class="ml-2 text-md font-bold leading-none">${w.config.series[seriesIndex]}%</div>
-                                                </div>`,
-            },
-        };
-       
-        console.log(this.chartNewVsReturning);
-        // Attach SVG fill fixer to all ApexCharts
-        window['Apex'] = {
-            chart: {
-                events: {
-                    mounted: (chart: any, options?: any): void => {
-                        this._fixSvgFill(chart.el);
-                    },
-                    updated: (chart: any, options?: any): void => {
-                        this._fixSvgFill(chart.el);
-                    },
-                },
-            },
-        };
-    }
+    this._homeService.IndicadoresPrincipales()
+    .subscribe({
+        next: (response) => {
+          console.log(response);
+          this.nuevos = response.nuevos;
+          this.asignados = response.asignados;
+          this.enEspera = response.enEspera;
+          this.porConfirmar = response.porConfirmar;
 
-    ngOnDestroy(): void {
-        // Unsubscribe from all subscriptions
-        this._unsubscribeAll.next(null);
-        this._unsubscribeAll.complete();
-    }
+          this.cdRef.detectChanges();
+        },
+        complete: () => {
+          //this.btnLoading = false;
+        },
+        error: () => {
+          //this.btnLoading = false;
+          this.alertService.showError('Error', 'Ocurrió un error inesperado.');
+        }
+      })
+  }
 
-     // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * Track by function for ngFor loops
-     *
-     * @param index
-     * @param item
-     */
-    trackByFn(index: number, item: any): any {
-        return item.id || index;
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Private methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Fix the SVG fill references. This fix must be applied to all ApexCharts
-     * charts in order to fix 'black color on gradient fills on certain browsers'
-     * issue caused by the '<base>' tag.
-     *
-     * Fix based on https://gist.github.com/Kamshak/c84cdc175209d1a30f711abd6a81d472
-     *
-     * @param element
-     * @private
-     */
-    private _fixSvgFill(element: Element): void {
-        // Current URL
-        const currentURL = this._router.url;
-
-        // 1. Find all elements with 'fill' attribute within the element
-        // 2. Filter out the ones that doesn't have cross reference so we only left with the ones that use the 'url(#id)' syntax
-        // 3. Insert the 'currentURL' at the front of the 'fill' attribute value
-        Array.from(element.querySelectorAll('*[fill]'))
-            .filter((el) => el.getAttribute('fill').indexOf('url(') !== -1)
-            .forEach((el) => {
-                const attrVal = el.getAttribute('fill');
-                el.setAttribute(
-                    'fill',
-                    `url(${currentURL}${attrVal.slice(attrVal.indexOf('#'))}`
-                );
-            });
-    }
-
-    /**
-     * Prepare the chart data from the data
-     *
-     * @private
-     */
-   
 }
